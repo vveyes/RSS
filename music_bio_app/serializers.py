@@ -14,7 +14,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Album
-        fields = ('album_name', 'album_year', 'artist_name', 'tracks')
+        fields = ('artist_name', 'tracks')
 
     def to_representation(self, instance):
         representation = super(AlbumSerializer, self).to_representation(instance)
