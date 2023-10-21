@@ -10,16 +10,17 @@ class TrackSerializer(serializers.ModelSerializer):
 
 class AlbumSerializer(serializers.ModelSerializer):
     artist_name = serializers.StringRelatedField(source='artist', read_only=True)
-    tracks = TrackSerializer(many=True, read_only=True)
+    tracks = TrackSerializer(many=True, source='track_set', read_only=True)
 
     class Meta:
         model = Album
-        fields = '__all__'
+        fields = ('album_name', 'album_year', 'artist_name', 'tracks')
 
     def to_representation(self, instance):
         representation = super(AlbumSerializer, self).to_representation(instance)
         representation['album'] = f'{instance.album_name}[{instance.album_year}]'
         representation['artist@name'] = representation.pop('artist_name')
+        representation['tracks'] = ', '.join([track['track_name'] for track in representation.pop('tracks')])
         return representation
 
 
